@@ -1,15 +1,24 @@
-input = <<END
-b inc 5 if a > 1
-a inc 1 if b < 5
-c dec -10 if a >= 1
-c inc -20 if c == 10
-END
+instructions = []
+File.open('./input') do |file|
+  file.each_line { |line| instructions.push(line) }
+end
 
-instructions = input.split("\n")
-variables = {}
+registers = {}
 
 instructions.each do |i|
-  step = i.split(' if ')
-  step[0].tr!('inc', '+=')
-  step[0].tr!('dec', '-=')
-  
+  i.chomp!
+  modifier, condition = i.split(' if ')
+  modifier.sub!('inc', '+=')
+  modifier.sub!('dec', '-=')
+  registers[modifier.split(' ')[0]] = 0 unless registers[modifier.split(' ')[0]]
+  registers[condition.split(' ')[0]] = 0 unless registers[condition.split(' ')[0]]
+  words = modifier.split(' ')
+  words[0] = words[0].prepend('registers["').concat('"]')
+  modifier = words.join(' ')
+  words = condition.split(' ')
+  words[0] = words[0].prepend('registers["').concat('"]')
+  condition = words.join(' ')
+  eval(modifier) if eval(condition)
+end
+
+puts registers.values.max
