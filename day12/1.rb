@@ -32,7 +32,7 @@ end
 def dijkstra(network)
   distance = []
   prev = []
-  unvisited = []
+  unvisited = {}
   distance[0] = 0
   prev[0] = 0
 
@@ -43,8 +43,25 @@ def dijkstra(network)
     end
     unvisited[node.id] = distance[node.id]
   end
-  puts unvisited
+  while unvisited.length
+    min = unvisited.values.min
+    break if min == Float::INFINITY
+    min_index = unvisited.key(min)
+    unvisited.delete(min_index)
+    network[min_index].pipes.each do |pipe|
+      alt = distance[min_index] + 1
+      if alt < distance[pipe]
+        distance[pipe] = alt
+        prev[pipe] = min_index
+      end
+      if unvisited.key?(pipe)
+        unvisited[pipe] = distance[pipe]
+      end
+    end
+  end
+  return [distance, prev]
 end
 
 
-dijkstra(network)
+distance, prev = dijkstra(network)
+puts network.length - prev.count(nil)
