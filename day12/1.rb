@@ -29,4 +29,22 @@ networkmap.each do |node|
   end
 end
 
-puts network
+def dijkstra(network)
+  distance = []
+  prev = []
+  unvisited = []
+  distance[0] = 0
+  prev[0] = 0
+
+  network.each do |node|
+    if node.id != 0
+      distance[node.id] = Float::INFINITY
+      prev[node.id] = nil
+    end
+    unvisited[node.id] = distance[node.id]
+  end
+  puts unvisited
+end
+
+
+dijkstra(network)
