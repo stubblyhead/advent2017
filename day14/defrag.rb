@@ -2,10 +2,11 @@ class KnotHash < Array
 
   attr_reader :current, :skip, :hash
 
-  def initialize
+  def initialize(lengths)
     super(255)
     @current = @skip = 0
     (0..255).each { |i| self[i] = i }
+    self.calculate_hash(lengths)
   end
 
   def pinch(start, length)
@@ -66,15 +67,18 @@ class KnotHash < Array
   end
 end
 
-lengths = []
-File.open('./input') do |file|
-  file.readline.chomp.each_byte { |i| lengths.push(i) }
+
+keystring = 'hfdlxzhv'
+disk = []
+(0..127).each do |i|
+  lengths = []
+  thiskey = "#{keystring}-#{i}"
+  thiskey.each_byte { |i| lengths.push(i) }
+  disk.push(KnotHash.new(lengths))
 end
 
-
-ary = KnotHash.new()
-
-#(0..255).each { |i| ary[i] = i}
-
-ary.calculate_hash(lengths)
-puts ary.hash
+count = 0
+disk.each do |i|
+  count += i.hash.to_i(16).to_s(2).count('1')
+end
+puts count
