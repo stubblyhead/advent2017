@@ -80,15 +80,16 @@ end
 grid = []
 count = 0
 
-disk.each do |i|
-  line = "%0#{i.hash.size*4}b" % i.hash.hex.to_i
-  grid.push(line.split(''))
+disk.each_index do |i|
+  line = "%0#{disk[i].hash.size*4}b" % disk[i].hash.hex.to_i
+  grid.push([])
+  (0..127).each do |j|
+    grid[i].push(Array.new(2,0))
+    grid[i][j][0] = line[j].to_i
+  end
   count += line.count('1')
 end
 
-grid.each do |i|
-  i.each_index { |j| i[j] = i[j].to_i }
-end
 
 p grid
 puts "#{count} used squares"
