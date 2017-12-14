@@ -68,7 +68,7 @@ class KnotHash < Array
 end
 
 
-keystring = 'flqrgnkx'
+keystring = 'hfdlxzhv'
 disk = []
 (0..127).each do |i|
   lengths = []
@@ -90,6 +90,34 @@ disk.each_index do |i|
   count += line.count('1')
 end
 
+def visit(grid, row, col, region)
+  if grid[row][col] == [1,0]
+    #puts "unvisited cell (#{row},#{col}), setting region to #{region}"
+    grid[row][col][1] = region
+    neighbors = get_neighbors(row,col)
+    neighbors.each { |i| visit(grid,i[0],i[1], region) }
+    return true
+  else
+    #puts "visited cell: #{grid[row][col]}"
+    return false
+  end
+end
 
-p grid
+def get_neighbors(row, col)
+  up = [row-1,0].max
+  down = [row+1,127].min
+  left = [col-1,0].max
+  right = [col+1,127].min
+  return [[row, right],[row, left],[up, col],[down, col]]
+end
+
+regions = 1
+
+(0..127).each do |row|
+  (0..127).each do |col|
+    regions += 1 if visit(grid, row, col, regions)
+  end
+end
+
 puts "#{count} used squares"
+puts "#{regions-1} seperate regions"
