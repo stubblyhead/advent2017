@@ -92,13 +92,11 @@ end
 
 def visit(grid, row, col, region)
   if grid[row][col] == [1,0]
-    #puts "unvisited cell (#{row},#{col}), setting region to #{region}"
     grid[row][col][1] = region
     neighbors = get_neighbors(row,col)
     neighbors.each { |i| visit(grid,i[0],i[1], region) }
     return true
   else
-    #puts "visited cell: #{grid[row][col]}"
     return false
   end
 end
