@@ -1,5 +1,4 @@
 scanners = []
-severity = 0
 
 File.open('./input') do |file|
   file.each_line do |line|
@@ -12,10 +11,23 @@ scanners.each_index do |i|
   scanners[i] = 0 if scanners[i] == nil
 end
 
-scanners.each_index do |i|
-  if i % ((scanners[i] - 1) * 2)== 0
-    severity += scanners[i] * i
+#scanners = [3,2,0,0,4,0,4]
+
+def get_severity(scanners, delay=0)
+  severity = 0
+  scanners.each_index do |i|
+    if (i + delay) % ((scanners[i] - 1) * 2)== 0
+      severity += scanners[i] * i
+    end
   end
+  severity
 end
 
-puts severity
+severity = nil
+delay = 0
+while severity != 0
+  severity = get_severity(scanners, delay)
+  puts "severity #{severity} at delay #{delay}" if delay == 0 or severity == 0
+  delay += 1
+
+end
