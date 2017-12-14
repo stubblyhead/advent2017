@@ -77,9 +77,18 @@ disk = []
   disk.push(KnotHash.new(lengths))
 end
 
-#count = 0
+grid = []
+count = 0
+
 disk.each do |i|
-  #count += i.hash.to_i(16).to_s(2).count('1')
-  puts i.hash.to_i(16).to_s(2)
+  line = "%0#{i.hash.size*4}b" % i.hash.hex.to_i
+  grid.push(line.split(''))
+  count += line.count('1')
 end
-#puts count
+
+grid.each do |i|
+  i.each_index { |j| i[j] = i[j].to_i }
+end
+
+p grid
+puts "#{count} used squares"
