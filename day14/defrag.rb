@@ -68,7 +68,7 @@ class KnotHash < Array
 end
 
 
-keystring = 'hfdlxzhv'
+keystring = 'flqrgnkx'
 disk = []
 (0..127).each do |i|
   lengths = []
@@ -77,8 +77,9 @@ disk = []
   disk.push(KnotHash.new(lengths))
 end
 
-count = 0
+#count = 0
 disk.each do |i|
-  count += i.hash.to_i(16).to_s(2).count('1')
+  #count += i.hash.to_i(16).to_s(2).count('1')
+  puts i.hash.to_i(16).to_s(2)
 end
-puts count
+#puts count
