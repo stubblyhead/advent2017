@@ -12,11 +12,14 @@ class Generator
   end
 end
 
-gen_a = Generator.new(65,16807)
-gen_b = Generator.new(8921,48271)
+gen_a = Generator.new(634,16807)
+gen_b = Generator.new(301,48271)
 
-(1..5).each do |i|
+matchcount = 0
+(1..40000000).each do |i|
   gen_a.next_value
   gen_b.next_value
-  print "#{gen_a.lsb}\n#{gen_b.lsb}\n\n"
+  matchcount += 1 if gen_a.lsb == gen_b.lsb
 end
+
+puts matchcount
