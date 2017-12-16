@@ -23,10 +23,25 @@ class Dance
 
 end
 
-dance = Dance.new(%w[a b c d e])
+moves = []
+File.open('./input') do |file|
+  moves = file.readline.split(',')
+end
 
-dance.spin(1)
-dance.exchange(3,4)
-dance.partner('e','b')
+dance = Dance.new(('a'..'p').to_a)
+moves.each do |i|
+  case i[0]
+  when 's'
+    dance.spin(i[1..-1].to_i)
+  when 'x'
+    exch = i[1..-1].split('/')
+    dance.exchange(exch[0].to_i, exch[1].to_i)
+  when 'p'
+    partners = i[1..-1].split('/')
+    dance.partner(partners[0],partners[1])
+  end
+end
 
-print dance.dancers
+print "final positions: "
+dance.dancers.each { |i| print i }
+print "\n"
