@@ -15,9 +15,17 @@ class Buffer
   end
 end
 
-spinlock = Buffer.new(3)
-(1..9).each do |i|
+spinlock = Buffer.new(316)
+(1..2017).each do |i|
+  spinlock.cycle
+  #puts spinlock.buffer[1]
+end
+
+puts spinlock.buffer[spinlock.start + 1]
+
+(2018..50000000).each do |i|
   spinlock.cycle
 end
 
-puts spinlock.buffer.join(' ')
+position_zero = spinlock.buffer.index(0)
+puts spinlock.buffer[position_zero + 1]
