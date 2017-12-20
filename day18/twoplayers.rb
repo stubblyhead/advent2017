@@ -15,7 +15,7 @@ class Duet
 
   def queue_add(value)
     @queue.push(value)
-    puts "put value #{value} into queue"
+    # => puts "put value #{value} into queue"
   end
 
   def snd(value)
@@ -29,10 +29,10 @@ class Duet
   def set(register, value)
     if value.class.to_s == 'Fixnum'
       registers[register] = value
-      puts "registers[#{register}] is now #{value}"
+      #puts "registers[#{register}] is now #{value}"
     else
       registers[register] = registers[value]
-      puts "registers[#{register}] is now #{registers[value]}"
+      #puts "registers[#{register}] is now #{registers[value]}"
     end
   end
 
@@ -63,7 +63,7 @@ class Duet
   def rcv(register)
     if @queue.length > 0
       registers[register] = @queue[0]
-      puts "put value #{queue[0]} into registers[#{register}]"
+      #puts "put value #{queue[0]} into registers[#{register}]"
       @queue = @queue[1..-1]
       return true
     else
@@ -86,7 +86,7 @@ class Duet
     until @waiting
       inst = @instructions[@instruction_pointer]
       inst_incrementor = 1
-      puts inst
+      #puts inst
       parts = inst.split(' ')
       if parts[1].match(/\d+/)
         parts[1] = parts[1].to_i
@@ -112,7 +112,7 @@ class Duet
         end
       when 'jgz'
         inst_incrementor = jgz(parts[1], parts[2])
-        puts inst_incrementor
+        #puts inst_incrementor
       end
       @instruction_pointer += inst_incrementor
     end
@@ -133,10 +133,10 @@ player_a.set_partner(player_b)
 player_b.set_partner(player_a)
 
 until player_a.waiting == true && player_b.waiting == true && player_a.queue.length == 0 && player_b.queue.length == 0
-  puts "player_a's turn"
+  #puts "player_a's turn"
   player_a.play
-  puts "player_b's turn"
+  #puts "player_b's turn"
   player_b.play
 end
 
-puts player_a.values_sent
+puts player_b.values_sent
