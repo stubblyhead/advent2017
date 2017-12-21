@@ -11,6 +11,7 @@ def travel(direction, x, y, map)
       y -= 1
     end
   end
+  return [x,y]
 end
 
 def turn(direction, map, x, y)
@@ -65,3 +66,17 @@ def turn(direction, map, x, y)
     end
   end
 end
+
+map = []
+File.open('./testcase') do |file|
+  file.each_line do |line|
+    map.push(line)
+  end
+end
+
+start_x = map[0].index('|')
+x, y = travel(:down, start_x, 0, map)
+direction = turn(:down, x, y, map)
+x, y = travel(direction, x, y, map)
+
+puts "#{x}  #{y}"
