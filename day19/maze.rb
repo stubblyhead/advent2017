@@ -1,10 +1,11 @@
-def travel(direction, x, y, map)
+def travel(direction, x, y, map, steps)
   #puts "starting at #{x}, #{y} (#{map[y][x]})"
   newdirection = true
   until (map[y][x] == '+' or map[y][x] == ' ') and newdirection == false
     newdirection = false
     #puts "now at #{x}, #{y} (#{map[y][x]})"
     #puts "going #{direction}"
+    steps += 1
     case direction
     when :right
       x += 1
@@ -17,7 +18,7 @@ def travel(direction, x, y, map)
     end
     print map[y][x] if map[y][x].match(/\w/)
   end
-  return [x,y]
+  return [x,y,steps]
 end
 
 def turn(direction, x, y, map)
@@ -84,8 +85,10 @@ end
 x = map[0].index('|')
 y = 0
 direction = :down
+steps = 0
 until map[y][x] == ' '
-  (x, y) = travel(direction, x, y, map)
+  (x, y, steps) = travel(direction, x, y, map, steps)
   #puts "ended at #{x}, #{y} (#{map[y][x]})"
   direction = turn(direction, x, y, map)
 end
+puts "\n#{steps} total steps"
