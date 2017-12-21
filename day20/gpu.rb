@@ -1,6 +1,6 @@
 particles = []
 
-File.open('./testcase') do |file|
+File.open('./input') do |file|
   file.each_line do |line|
     particles.push(line.chomp)
   end
