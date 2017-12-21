@@ -53,7 +53,6 @@ def turn(direction, x, y, map)
     else
       left = map[y][x-1]
       right = map[y][x+1]
-      #puts "left char: #{left}  right char: #{right}"
       if left == ' '
         return :right
       else
@@ -64,8 +63,8 @@ def turn(direction, x, y, map)
     if x == map[y].length - 1
       return :left
     else
-      left = [y][x+1]
-      right = [y][x-1]
+      left = map[y][x+1]
+      right = map[y][x-1]
       if left == ' '
         return :left
       else
@@ -76,7 +75,7 @@ def turn(direction, x, y, map)
 end
 
 map = []
-File.open('./testcase') do |file|
+File.open('./input') do |file|
   file.each_line do |line|
     map.push(line.chomp)
   end
