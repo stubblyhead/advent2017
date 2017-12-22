@@ -15,7 +15,7 @@ particles.keys.each do |particle|
 end
 
 def quadratic(accel, vel, pos, t)
-  return accel*t**2/2.0 + vel*t + pos
+  return accel*t*(t+1)*0.5 + vel*t + pos
 end
 
 positions, velocities, accelerations, pos_at_t = {},{},{},{}
@@ -26,7 +26,7 @@ particles.each do |key,val|
   accelerations[key] = val[2]
 end
 
-(1..10).each do |t|
+(1..100).each do |t|
   #p "position at #{t}:  #{pos_at_t}"
   #p "accelerations:  #{accelerations}"
   #p "velocities: #{velocities}"
@@ -44,7 +44,7 @@ end
   collided = positions.keys - pos_at_t.keys
   collided.each do |i|
     positions.delete(i)
-    puts "deleted particle #{i}"
+    #puts "deleted particle #{i}"
   end
 
 end
