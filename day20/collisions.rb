@@ -14,44 +14,40 @@ particles.keys.each do |particle|
   end
 end
 
-def step(particles)
-  particles.keys.each do |particle|
-    (0..2).each do |i|
-      particles[particle][1][i] = particles[particle][1][i] + particles[particle][2][i]
-      particles[particle][0][i] += particles[particle][1][i]
+def quadratic(accel, vel, pos, t)
+  return accel*t**2/2.0 + vel*t + pos
+end
+
+positions, velocities, accelerations, pos_at_t = {},{},{},{}
+particles.each do |key,val|
+  positions[key] = val[0]
+  pos_at_t[key] = val[0]
+  velocities[key] = val[1]
+  accelerations[key] = val[2]
+end
+
+(1..15).each do |t|
+  #p "position at #{t}:  #{pos_at_t}"
+  #p "accelerations:  #{accelerations}"
+  #p "velocities: #{velocities}"
+  positions.keys.each do |i|
+    x = quadratic(accelerations[i][0], velocities[i][0], positions[i][0], t)
+    y = quadratic(accelerations[i][1], velocities[i][1], positions[i][1], t)
+    z = quadratic(accelerations[i][2], velocities[i][2], positions[i][2], t)
+    pos_at_t[i] = [x,y,z]
+  end
+  pos_at_t.values.each do |i|
+    if pos_at_t.values.count(i) > 1
+      pos_at_t.delete_if { |key, val| val == i }
     end
   end
-  return particles
-end
-
-def collide(particles)
-  particles.keys.each do |particle|
-    found_collision = false
-    position = particles[particle][0]
-    #p "particle #{particle} position:  #{position}"
-    particles.keys.each do |fuck|
-      if particle != fuck && particles[fuck][0] == position
-        #puts "base position: #{position}\ncomp position: #{particles[fuck][0]}"
-        particles.delete(fuck)
-        found_collision = true
-      end
-    end
-    #puts "collision found :#{found_collision}"
-    if found_collision
-      particles.delete(particle)
-      break
-    end
-    #p "remaining keys:  #{particles.keys}"
+  collided = positions.keys - pos_at_t.keys
+  collided.each do |i|
+    positions.delete(i)
+    puts "deleted particle #{i}"
   end
-  return particles
+
 end
 
-(1..50).each do |i|
-  start_particles = particles.length
-  particles = step(particles)
-  particles = collide(particles)
-  end_particles = particles.length
-  puts "#{start_particles - end_particles} particles removed on iteration #{i}" if start_particles != end_particles
-end
 
-puts particles.length
+puts "#{pos_at_t.count} uncollided particles"
