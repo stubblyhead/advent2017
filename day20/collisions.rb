@@ -26,7 +26,7 @@ particles.each do |key,val|
   accelerations[key] = val[2]
 end
 
-(1..15).each do |t|
+(1..10).each do |t|
   #p "position at #{t}:  #{pos_at_t}"
   #p "accelerations:  #{accelerations}"
   #p "velocities: #{velocities}"
@@ -49,5 +49,7 @@ end
 
 end
 
+puts pos_at_t[71]
+puts pos_at_t[72]
 
 puts "#{pos_at_t.count} uncollided particles"
