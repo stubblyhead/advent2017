@@ -1,6 +1,6 @@
 particles = {}
 
-File.open('./testcase2') do |file|
+File.open('./input') do |file|
   file.each_line do |line|
     particle = line.chomp
     parts = particle.split(', ')
@@ -46,9 +46,12 @@ def collide(particles)
   return particles
 end
 
-(1..4).each do |i|
+(1..50).each do |i|
+  start_particles = particles.length
   particles = step(particles)
   particles = collide(particles)
+  end_particles = particles.length
+  puts "#{start_particles - end_particles} particles removed on iteration #{i}" if start_particles != end_particles
 end
 
 puts particles.length
