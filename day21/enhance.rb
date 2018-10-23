@@ -1,4 +1,30 @@
 require 'deep_clone'
+require 'pry'
+require 'matrix'
+
+def array_split(in_array)
+  binding.pry
+  if in_array[0].length % 2 == 0
+    num_splits = in_array[0].length / 2
+    out_array = Array.new(num_splits) { Array.new(num_splits) { nil } }
+    temp_matrix = Matrix[*in_array]
+    (0..(num_splits - 1)).each do |i|
+      (0..(num_splits - 1)).each do |j|
+        out_array[i][j] = temp_matrix.minor(i*2,2,j*2,2).to_a
+      end
+    end
+  else
+    num_splits = in_array[0].length / 3
+    out_array = Array.new(num_splits) { Array.new(num_splits) { nil } }
+    temp_matrix = Matrix[*in_array]
+    (0..(num_splits - 1)).each do |i|
+      (0..(num_splits - 1)).each do |j|
+        out_array[i][j] = temp_matrix.minor(i*3,3,j*3,3).to_a
+      end
+    end
+  end
+  out_array
+end
 
 patterns = File.readlines('./testcase')
 patterns.each_index do |line|
@@ -8,7 +34,6 @@ patterns.each_index do |line|
     patterns[line][i].each_index { |j| patterns[line][i][j] = patterns[line][i][j].split('')}
   end
 end
-
 rulehash = {}
 patterns.each do |i|
   base = i[0]
@@ -27,4 +52,8 @@ patterns.each do |i|
   rulehash[rotations_flips] = i[1]
 end
 
-rulehash.each { |key,val| puts "#{key} ==> #{val}"}
+start = [['.', '#', '.'],
+         ['.', '.', '#'],
+         ['#', '#', '#']]
+
+p array_split(start)
