@@ -2,8 +2,9 @@ require 'deep_clone'
 require 'pry'
 require 'matrix'
 
-def array_split(in_array)
-  binding.pry
+binding.pry
+
+def split_array(in_array)
   if in_array[0].length % 2 == 0
     num_splits = in_array[0].length / 2
     out_array = Array.new(num_splits) { Array.new(num_splits) { nil } }
@@ -52,8 +53,23 @@ patterns.each do |i|
   rulehash[rotations_flips] = i[1]
 end
 
-start = [['.', '#', '.'],
-         ['.', '.', '#'],
-         ['#', '#', '#']]
+enhance = [['.', '#', '.'],
+          ['.', '.', '#'],
+          ['#', '#', '#']]
 
-p array_split(start)
+(1..2).each do |i|
+  subary = split_array(enhance)
+  temp_enhance = Array.new(subary.length) { Array.new(subary.length) { nil } }
+  subary.each_index do |j|
+    subary[j].each_index do |k|
+      rulehash.keys.each do |l|
+        temp_enhance[j][k] = rulehash[l] if l.index(subary[j][k])
+      end
+    end
+  end
+  #binding.pry
+  enhance = temp_enhance[0][0]
+  p enhance
+end
+
+p enhance
