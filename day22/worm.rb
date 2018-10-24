@@ -5,8 +5,8 @@ class Virus
   attr_reader :x, :y, :direction, :infections
 
   def initialize(grid)
-    @x = (grid.length / 2)
-    @y = (grid.length / 2)
+    @x = (grid.column_count / 2)
+    @y = (grid.row_count / 2)
     @direction = :up
     @infections = 0
   end
@@ -64,12 +64,16 @@ class Virus
 
 
   def burst(grid)
-    if grid[@x, @y] = '#'
+    if grid[@x, @y] == '#'
       turn_right()
-      grid[@x, @y] = '.'
+      temp = grid.to_a
+      temp[@x][@y] = '.'
+      grid = Matrix[*temp]
     else
       turn_left()
-      grid[@x, @y] = '#'
+      temp = grid.to_a
+      temp[@x][@y] = '#'
+      grid = Matrix[*temp]
       @infections += 1
     end
     grid = move(grid)
