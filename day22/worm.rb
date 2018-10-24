@@ -96,6 +96,6 @@ input = Matrix[['.','.','#'],
                ['.','.','.']]
 
 morris = Virus.new(input)
-binding.pry
-70.times { input = morris.burst(input) }
-p morris.infections
+#binding.pry
+10000.times { input = morris.burst(input) }
+puts "#{morris.infections} infections after 10000 bursts"
