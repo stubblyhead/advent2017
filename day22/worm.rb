@@ -51,12 +51,12 @@ class Virus
     if @x == -1
       grid = Matrix.hstack(Matrix.column_vector(Array.new(grid.length) { '.' } , grid))
       @x = 0
-    elsif @x == grid.length
+    elsif @x == grid.column_count
       grid = Matrix.hstack(grid, Matrix.column_vector(Array.new(grid.length) { '.' } ))
     elsif @y == -1
       grid = Matrix.vstack(Matrix.row_vector((Array.new(grid.length) { '.'} ), grid))
       @y = 0
-    elsif @y == grid.length
+    elsif @y == grid.row_count
       grid = Matrix.vstack(grid, Matrix.row_vector(Array.new(grid.lenth) { '.' } ))
     end
     grid
