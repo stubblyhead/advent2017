@@ -90,12 +90,15 @@ def print_grid(grid)
   end
 end
 
-
-input = Matrix[['.','.','#'],
-               ['#','.','.'],
-               ['.','.','.']]
+input = Matrix[]
+File.open('./input') do |file|
+  lines = []
+  file.each_line do |line|
+    lines.push(line.chomp.split(''))
+  end
+  input = Matrix[*lines]
+end
 
 morris = Virus.new(input)
-#binding.pry
 10000.times { input = morris.burst(input) }
 puts "#{morris.infections} infections after 10000 bursts"
