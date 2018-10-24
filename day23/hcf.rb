@@ -1,3 +1,5 @@
+require 'pry'
+binding.pry
 class Coprocessor
   attr_reader :registers, :mulcount, :instructions
 
@@ -14,6 +16,7 @@ class Coprocessor
     else
       registers[register] = registers[value]
     end
+    puts "registers[#{register}] == #{value}"
   end
 
   def sub(register, value)
@@ -35,6 +38,7 @@ class Coprocessor
 
   def jnz(value, offset)
     value = registers[value] unless value.class.to_s == 'Fixnum'
+    puts "jnz value == #{value}"
     if value != 0
       return offset
     else
@@ -45,12 +49,13 @@ class Coprocessor
   def run
     until @instruction_pointer < 0 or @instruction_pointer >= @instructions.length
       inst = @instructions[@instruction_pointer]
+      puts inst
       inst_incrementor = 1
       parts = inst.split(' ')
-      if parts[1].match(/\d*/)
+      if parts[1].match(/\d+/)
         parts[1] = parts[1].to_i
       end
-      if parts[2].match(/\d*/)
+      if parts[2].match(/\d+/)
         parts[2] = parts[2].to_i
       end
       case parts[0]
@@ -79,4 +84,4 @@ hcf = Coprocessor.new(instructions)
 
 hcf.run
 
-puts "#{mulcount} multiplications at end of program"
+puts "#{hcf.mulcount} multiplications at end of program"
