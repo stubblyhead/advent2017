@@ -11,16 +11,16 @@ class Coprocessor
   end
 
   def set(register, value)
-    if value.class.to_s == 'Fixnum'
+    if value.class.to_s == 'Integer'
       registers[register] = value
     else
       registers[register] = registers[value]
     end
-    puts "registers[#{register}] == #{value}"
+    #puts "registers[#{register}] == #{value}"
   end
 
   def sub(register, value)
-    if value.class.to_s == 'Fixnum'
+    if value.class.to_s == 'Integer'
       registers[register] -= value
     else
       registers[register] -= registers[value]
@@ -28,17 +28,18 @@ class Coprocessor
   end
 
   def mul(register, value)
-    if value.class.to_s == 'Fixnum'
+    if value.class.to_s == 'Integer'
       registers[register] *= value
     else
       registers[register] *= registers[value]
     end
     @mulcount += 1
+    #puts @mulcount
   end
 
   def jnz(value, offset)
     value = registers[value] unless value.class.to_s == 'Fixnum'
-    puts "jnz value == #{value}"
+    #puts "jnz value == #{value}"
     if value != 0
       return offset
     else
