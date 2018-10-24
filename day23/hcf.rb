@@ -1,10 +1,9 @@
-require 'pry'
-binding.pry
 class Coprocessor
   attr_reader :registers, :mulcount, :instructions
 
   def initialize(instructions)
     @registers = Hash.new(0)
+    ('a'..'h').each { |i| @registers[i] = 0 }
     @instructions = instructions
     @instruction_pointer = 0
     @mulcount = 0
@@ -12,34 +11,31 @@ class Coprocessor
 
   def set(register, value)
     if value.class.to_s == 'Integer'
-      registers[register] = value
+      @registers[register] = value
     else
-      registers[register] = registers[value]
+      @registers[register] = @registers[value]
     end
-    #puts "registers[#{register}] == #{value}"
   end
 
   def sub(register, value)
     if value.class.to_s == 'Integer'
-      registers[register] -= value
+      @registers[register] -= value
     else
-      registers[register] -= registers[value]
+      @registers[register] -= @registers[value]
     end
   end
 
   def mul(register, value)
     if value.class.to_s == 'Integer'
-      registers[register] *= value
+      @registers[register] *= value
     else
-      registers[register] *= registers[value]
+      @registers[register] *= @registers[value]
     end
     @mulcount += 1
-    #puts @mulcount
   end
 
   def jnz(value, offset)
-    value = registers[value] unless value.class.to_s == 'Fixnum'
-    #puts "jnz value == #{value}"
+    value = @registers[value] unless value.class.to_s == 'Integer'
     if value != 0
       return offset
     else
@@ -50,7 +46,6 @@ class Coprocessor
   def run
     until @instruction_pointer < 0 or @instruction_pointer >= @instructions.length
       inst = @instructions[@instruction_pointer]
-      puts inst
       inst_incrementor = 1
       parts = inst.split(' ')
       if parts[1].match(/\d+/)
