@@ -37,6 +37,19 @@ class Virus
     end
   end
 
+  def reverse()
+    case @direction
+    when :up
+      @direction = :down
+    when :down
+      @direction = :up
+    when :left
+      @direction = :right
+    when :right
+      @direction = :left
+    end
+  end
+
   def move(grid)
     case @direction
     when :up
@@ -65,14 +78,25 @@ class Virus
 
   def burst(grid)
     if grid[@row, @col] == '#'
-      #disinfect
+      #flag
       turn_right()
+      temp = grid.to_a
+      temp[@row][@col] = 'F'
+      grid = Matrix[*temp]
+    elsif grid[@row, @col] == '.'
+      #weaken
+      turn_left()
+      temp = grid.to_a
+      temp[@row][@col] = 'W'
+      grid = Matrix[*temp]
+    elsif grid[@row, @col] == 'F'
+      #clean
+      reverse()
       temp = grid.to_a
       temp[@row][@col] = '.'
       grid = Matrix[*temp]
     else
       #infect
-      turn_left()
       temp = grid.to_a
       temp[@row][@col] = '#'
       grid = Matrix[*temp]
@@ -100,5 +124,5 @@ File.open('./input') do |file|
 end
 
 morris = Virus.new(input)
-10000.times { input = morris.burst(input) }
-puts "#{morris.infections} infections after 10000 bursts"
+10000000.times { input = morris.burst(input) }
+puts "#{morris.infections} infections after 10000000 bursts"
