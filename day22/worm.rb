@@ -2,11 +2,11 @@ require 'matrix'
 require 'pry'
 
 class Virus
-  attr_reader :x, :y, :direction, :infections
+  attr_reader :row, :col, :direction, :infections
 
   def initialize(grid)
-    @x = (grid.column_count / 2)
-    @y = (grid.row_count / 2)
+    @col = (grid.column_count / 2)
+    @row = (grid.row_count / 2)
     @direction = :up
     @infections = 0
   end
@@ -39,24 +39,24 @@ class Virus
 
   def move(grid)
     case @direction
-    when :up0
-      @y -= 1
+    when :up
+      @row -= 1
     when :right
-      @x += 1
+      @col += 1
     when :down
-      @y += 1
+      @row += 1
     when :left
-      @x -= 1
+      @col -= 1
     end
-    if @x == -1
+    if @col == -1
       grid = Matrix.hstack(Matrix.column_vector(Array.new(grid.row_count) { '.' }) , grid)
-      @x = 0
-    elsif @x == grid.column_count
+      @col = 0
+    elsif @col == grid.column_count
       grid = Matrix.hstack(grid, Matrix.column_vector(Array.new(grid.row_count) { '.' } ))
-    elsif @y == -1
+    elsif @row == -1
       grid = Matrix.vstack(Matrix.row_vector(Array.new(grid.column_count) { '.'} ), grid)
-      @y = 0
-    elsif @y == grid.row_count
+      @row = 0
+    elsif @row == grid.row_count
       grid = Matrix.vstack(grid, Matrix.row_vector(Array.new(grid.column_count) { '.' } ))
     end
     grid
@@ -64,15 +64,17 @@ class Virus
 
 
   def burst(grid)
-    if grid[@x, @y] == '#'
+    if grid[@row, @col] == '#'
+      #disinfect
       turn_right()
       temp = grid.to_a
-      temp[@x][@y] = '.'
+      temp[@row][@col] = '.'
       grid = Matrix[*temp]
     else
+      #infect
       turn_left()
       temp = grid.to_a
-      temp[@x][@y] = '#'
+      temp[@row][@col] = '#'
       grid = Matrix[*temp]
       @infections += 1
     end
@@ -82,11 +84,18 @@ class Virus
   end
 end
 
+def print_grid(grid)
+  (0..grid.row_count - 1).each do |i|
+    puts grid.row(i).to_a.join(' ')
+  end
+end
+
+
 input = Matrix[['.','.','#'],
                ['#','.','.'],
                ['.','.','.']]
 
 morris = Virus.new(input)
-7.times { input = morris.burst(input) }
-
+binding.pry
+70.times { input = morris.burst(input) }
 p morris.infections
