@@ -1,7 +1,7 @@
 require 'psych'
 require 'pry'
 
-binding.pry
+#binding.pry
 
 class Tape
   attr_reader :pointer, :stream, :rules, :current_state, :steps
@@ -46,7 +46,7 @@ end
 
 #input is practically yaml, so make it actual yaml
 lines = []
-File.open('./testcase') { |file| lines = file.readlines }
+File.open('./input') { |file| lines = file.readlines }
 lines[0].sub!(/state/, 'state:')
 lines[1].sub!(/after/, 'after:')
 
